@@ -132,7 +132,17 @@ func (r Resource) Tags() map[string]string {
 				t[vv] = ""
 			}
 		}
+	case "openstack_compute_instance_v2":
+		for k, v := range r.Attributes() {
+			parts := strings.SplitN(k, ".", 2)
+			if len(parts) == 2 && parts[0] == "metadata" && parts[1] != "%" {
+				kk := strings.ToLower(parts[1])
+				vv := strings.ToLower(v)
+				t[kk] = vv
+			}
+		}
 	}
+
 	return t
 }
 
